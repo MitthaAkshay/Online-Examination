@@ -1,0 +1,50 @@
+{% extends 'teacher/TeacherDashboard.html' %} {% load widget_tweaks %} {% block pagecontent %} {%load static%}
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Exam Details
+        </div>
+
+        {% if stu %}
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Subjcet Code</th>
+                    <th scope="col">Subject Name</th>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Semester</th>
+                    <th scope="col">Exam Durations</th>
+                    <th scope="col">Created Date</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for st in stu %}
+                <tr>
+                    <th scope="row">{{st.Subject_code}}</th>
+                    <td>{{st.Subject_code}}</td>
+                    <td>{{st.Subject_name}}</td>
+                    <td>{{st.course}}</td>
+                    <td>{{st.semester}}</td>
+                    <td>{{st.Duration}}</td>
+                    <td>{{st.Exammonth}}/{{st.Examyear}}</td>
+                    <td>
+                        <a href="{% url 'teacher-updateexam' st.Subject_code %}" class="btn btn-success btn-xs" style="border-radius: 0%;"><i class="fas fa-user-edit"></i></a></a>
+                        <a href="{% url 'deletexam' st.Subject_code %}" class="btn btn-danger btn-xs" style="border-radius: 0%;"><i class="fas fa-trash-alt"></i></a>
+
+                    </td>
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<h2 class="text-center alert alert-info">No Data Found</h2>
+
+
+{% endif %} {% endblock pagecontent %}

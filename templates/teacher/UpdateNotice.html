@@ -1,0 +1,32 @@
+{% extends 'teacher/TeacherDashboard.html' %} {% load widget_tweaks %} {% block pagecontent %} {%load static%}
+
+<div class="container">
+    <h1 class=" alert alert-alert-info text-center"> Notice Board...! </h1>
+    <form action="" method="POST">
+        {% csrf_token %} {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-5">
+                <label for="question_id">Student On Login</label> {% render_field form.NoticeForStudentloginPage|attr:'required:true' class="form-control" placeholder="Question Id" %}
+            </div>
+            <div class="form-group col-md-5">
+                <label for="Paper_code">Student On Exam Time Table</label> {% render_field form.NoticeForStudentExamTimeTable|attr:'required:true' class="form-control" placeholder="Paper Code" %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-10">
+                <label for="question">Student In Paper Load</label> {% render_field form.NoticeForStudentQuestionPeparLoad|attr:'required:true' class="form-control" placeholder="Question" %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-5">
+                <label for="opti1">Notice For Every One</label> {% render_field form.NoticeForEveryOnearjunt|attr:'required:true' class="form-control" placeholder="Option 1" %}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-6">
+                <input type="submit" value="Update Notice" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock pagecontent %}

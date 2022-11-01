@@ -1,0 +1,57 @@
+{% extends 'teacher/TeacherDashboard.html' %} {% load widget_tweaks %} {% block pagecontent %} {%load static%}
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Question Details
+        </div>
+
+        {% if stu %}
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Question Sr No</th>
+                    <th scope="col">Subject Code</th>
+                    <th scope="col">Question</th>
+                    <th scope="col">Option1</th>
+                    <th scope="col">Option2</th>
+                    <th scope="col">Option3</th>
+                    <th scope="col">Option4</th>
+                    <th scope="col">Correct Answer</th>
+                    <th scope="col">Marks</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for st in stu %}
+                <tr>
+                    <th scope="row">{{st.id}}</th>
+                    <td>{{st.question_id}}</td>
+                    <td>{{st.Paper_code}}</td>
+                    <td>{{st.question}}</td>
+                    <td>{{st.Option1}}</td>
+                    <td>{{st.Option2}}</td>
+                    <td>{{st.Option3}}</td>
+                    <td>{{st.Option4}}</td>
+                    <td>{{st.answer}}</td>
+                    <td>{{st.marks}}</td>
+                    <td>
+
+                        <a href="{%  url 'teacher-updatequestions' st.id %}" class="btn btn-success btn-xs" style="border-radius: 0%;"><i class="fas fa-user-edit"></i></a></a>
+                        <a href="#" class="btn btn-danger btn-xs" style="border-radius: 0%;"><i class="fas fa-trash-alt"></i></a>
+
+                    </td>
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<h2 class="text-center alert alert-info">No Data Found</h2>
+
+
+{% endif %} {% endblock pagecontent %}
