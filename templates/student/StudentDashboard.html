@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Student Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap4-card-tables@1.2.0/dist/bootstrap4-card-tables.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap4-card-tables@1.2.0/dist/bootstrap4-card-tables.min.css">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <style>
+        .disabled-link {
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md py-3 navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'profile_pic\logo.jpg' %}" width="30" height="30" class="d-inline-block align-top" alt=""> &ensp;Online Examination
+        </a>
+        <a class="navbar-brand " href="#">Punyashlok Ahilyadevi Holkar Solapur University, Solapur</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+            <div class="mr-auto"></div>
+            <ul class="navbar-nav my-2 my-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'student-dashboard' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{request.user.first_name}} {{request.user.last_name}}                </a>
+                    <div class="dropdown-menu dropdown-menu-lg-right" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="text-center dropdown-item" href="{% url 'student-profile' %}"><i class="fas fa-user-circle" style="float: left;"></i>Profile</a>
+                        <a class="text-center dropdown-item" href="{% url 'student-view-marks' %}"><i class="fas fa-marker" style="float: left;"></i>View Marks</a>
+                        <a class="text-center dropdown-item" href="/logout"><i class="fas fa-sign-out-alt" style="float: left;"></i>Logout</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    {%for r in student %}
+                    <img src="{% static r.profile_pic.url %}" width="50" height="50" class="d-inline-block align-top" alt=""> {% endfor %}
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br> {% block content1 %}
+    <div class="container">
+        <p style="text-align:right;" id="clock"></p>
+
+        <div class="alert alert-info alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Welcome! {{request.user.first_name}} {{request.user.last_name}}</strong><br>You Logged in Successfully!!
+        </div>
+        <marquee width="100%" direction="left" height="40px">
+            <font color="red">
+                <p><i><b>{% for info in notice %}{{info.NoticeForStudentExamTimeTable}}{% endfor %}</b></i></p>
+            </font>
+        </marquee>
+    </div>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                Exam:&nbsp;{% for st in student %} {{st.course}}&nbsp; Semester:&nbsp; {{st.semester}} {% endfor %}
+            </div>
+            <!--{% if examtime %}-->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Paper Code</th>
+                        <th>Subject</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for table,list in zip %}
+                    <tr>
+                        <td>{{table.Date}}</td>
+                        <td>{{table.Paper_code}}</td>
+                        <td>{{table.Subject}}</td>
+                        <td>{{table.FromTime}}</td>
+                        <td>{{table.ToTime}}</td>
+                        {% if table.Status == "Start" and list == 1 %}
+                        <td><a class="btn btn-success btn-xs disabled-link" id="dis" style="border-radius: 0%;" href="#">Completed</a></td>
+                        </td>
+                        {% elif table.Status == "Start" and list == 0 %}
+                        <td><a class="btn btn-danger btn-xs" id="dis" style="border-radius: 0%;" href="{% url 'student-load-pepar' table.Paper_code %}">Start Exam</a></td>
+                        {% elif table.Status == "End" and list == 1 %}
+                        <td><a class="btn btn-success btn-xs disabled-link" id="dis" style="border-radius: 0%;" href="#">Completed</a></td>
+                        </td>
+                        {% elif table.Status == "End" and list == 0 %}
+                        <td><a class="btn btn-danger btn-xs disabled-link" id="dis" style="border-radius: 0%;" href="#">Absent</a></td>
+                        </td>
+                        {% else %}
+                        <td><a class="btn btn-success btn-xs disabled-link" id="dis" style="border-radius: 0%;" href="#">Scheduled</a></td>
+                        {% endif %}
+                        <!-- {% if table.Status == "Start" %}
+                        <td><a class="btn btn-danger btn-xs" id="dis" style="border-radius: 0%;" href="{% url 'student-load-pepar' table.Paper_code %}">Start</a></td>
+                        {% elif table.Status == "End" %}
+                        <td><a class="btn btn-success btn-xs disabled-link" id="dis" style="border-radius: 0%;" href="{% url 'student-load-pepar' table.Paper_code %}">End&nbsp;</a></td>
+                        {% else %}
+                        <td><a class="btn btn-success btn-xs disabled-link" id="dis" style="border-radius: 0%;" href="{% url 'student-load-pepar' table.Paper_code %}">Scheduled</a></td>
+                        {% endif %}-->
+                    </tr>{% endfor %}
+                </tbody>
+            </table>
+
+            <div class="card-footer text-center">
+                Online Exam
+            </div>
+        </div>
+        <!--{% else %}
+        <h2 class="text-center alert alert-info">No Exams Available</h2>
+
+        {% endif %}-->
+    </div>
+    <script>
+        setInterval(showTime, 1000);
+
+        function showTime() {
+            let time = new Date();
+            let hour = time.getHours();
+            let min = time.getMinutes();
+            let sec = time.getSeconds();
+            am_pm = "AM";
+
+            if (hour > 12) {
+                hour -= 12;
+                am_pm = "PM";
+            }
+            if (hour == 0) {
+                hr = 12;
+                am_pm = "AM";
+            }
+
+            hour = hour < 10 ? "0" + hour : hour;
+            min = min < 10 ? "0" + min : min;
+            sec = sec < 10 ? "0" + sec : sec;
+
+            let currentTime = hour + ":" +
+                min + ":" + sec + " " + am_pm;
+
+            document.getElementById("clock").innerHTML = "Time: " + currentTime;
+        }
+        showTime();
+    </script>
+
+
+    {% endblock content1 %}
+
+    <hr/>
+    <footer>
+        <div class="container">
+            <p class="pull-right"><a href="#"> Back to top</a></p>
+            <hr/>
+            <p> <h5 class="text-primary">&copy;  Developed By Ms Kanchana Mergu And Mr Akshay Mittha &copy; Contact 7249443563 , 9404929143 </h5>&copy; 2021 OnlineExaminationPAHSUS.com &middot;</p>
+            <hr/> 
+        </div>
+    </footer>
+
+    <script src="{% static 'js/all.min.js' %}"></script>
+</body>
+
+</html>
