@@ -1,0 +1,29 @@
+{% extends 'Exam/Home.html' %} {% load widget_tweaks %}
+<!--SignIn Start-->
+{% block content %}
+<div class="form-horizontal">
+    <h3>&ensp;Login</h3>
+    <hr />
+    <form class="box" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="col-md-3 control-label">Username</label>
+            <div class="col-md-3">
+                <!--<input class="form-control" id="inputUsername" placeholder="Enter valid username">-->
+                {% render_field form.username class="form-control" autocomplete="off" placeholder="Username" %}
+            </div>
+            <label class="col-md-3 control-label">Password</label>
+            <div class="col-md-3">
+                <!--<input class="form-control" id="inputUsername" placeholder="Enter valid username">-->
+                {% render_field form.password class="form-control" autocomplete="off" placeholder="Password" %}
+            </div>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+    </form>
+
+</div>
+
+{% endblock content %}
+<!--SignIn End-->
